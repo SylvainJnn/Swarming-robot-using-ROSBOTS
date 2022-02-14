@@ -1,0 +1,31 @@
+<launch>
+
+<!-- Launch the maze with n ROSbot -->
+
+  <arg name="rosbot_pro" default="true" />
+  <arg name="use_gazebo" default="false" />
+
+  <!-- Gazebo -->
+    <include file="$(find rosbot_gazebo)/launch/maze_world.launch" />
+    <include file="$(find firstros)/launch/2rosbot_gazebo.launch"/>
+    
+    <param name="use_sim_time" value="true" />
+
+  <!-- ROSbot 2.0 -->
+<!--  <group unless="$(arg use_gazebo)">
+    <include file="$(find rosbot_ekf)/launch/all.launch">
+      <arg name="rosbot_pro" value="$(arg rosbot_pro)" />
+    </include>
+
+    <include if="$(arg rosbot_pro)" file="$(find rplidar_ros)/launch/rplidar_a3.launch" />
+    <include unless="$(arg rosbot_pro)" file="$(find rplidar_ros)/launch/rplidar.launch" />
+  </group>
+-->
+  <node unless="$(arg use_gazebo)" pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0 3.14 0 0 base_link laser 100" />
+
+
+  <node pkg="rviz" type="rviz" name="rviz"/>
+
+
+
+</launch>

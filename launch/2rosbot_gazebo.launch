@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+ <!-- this one launch 2 rosbot 
+
+    <rosparam command="load" file="$(find joint_state_controller)/joint_state_controller.yaml" />
+  <group ns="robot1">
+    <param name="tf_prefix" value="robot1_tf" />
+    <include file="$(find firstros)/launch/launch1_rosbot.launch" >
+      <arg name="init_pose" value="-x 1 -y 1 -z 0" />
+      <arg name="robot_name"  value="Robot1" />
+    </include>
+  </group>
+  <group ns="robot2">
+    <param name="tf_prefix" value="robot2_tf" />
+    <include file="$(find firstros)/launch/launch1_rosbot.launch" >
+      <arg name="init_pose" value="-x -0 -y 0 -z 0" />
+      <arg name="robot_name"  value="Robot2" />
+    </include>
+  </group>
+
+-->
+  <rosparam command="load" file="$(find joint_state_controller)/joint_state_controller.yaml" />
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="joint_state_controller" />
+
+<group ns="rosbot1">
+  <param name="robot_description" command="$(find xacro)/xacro '$(find rosbot_description)/urdf/rosbot.xacro'"/>
+  <node name="rosbot_spawn1" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model rosbot1" >
+     
+  </node> 
+   
+  <node name="rosbot_state_publisher1" pkg="robot_state_publisher" type="robot_state_publisher"/>
+</group>
+
+
+<group ns="rosbot2">
+  <param name="robot_description" command="$(find xacro)/xacro '$(find rosbot_description)/urdf/rosbot.xacro'"/>
+  <node name="rosbot_spawn2" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model rosbot2
+                                                                                        -x -2 -y -4 " >
+    <!--<remap from="/odom" to="/rosbot2/odom"/>-->     
+                                                                                                      
+  </node>
+
+  <node name="rosbot_state_publisher2" pkg="robot_state_publisher" type="robot_state_publisher"/>
+</group>
+
+
+<!--
+  <param name="robot_description3" command="$(find xacro)/xacro '$(find rosbot_description)/urdf/rosbot.xacro'"/>
+  <node name="rosbot_spawn3" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model rosbot3
+                                                                                        -x 2 -y 2" />
+-->
+
+
+
+
+
+
+</launch>
