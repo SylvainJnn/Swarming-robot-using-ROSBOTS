@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+
+ <!-- this one launch 2 rosbot -->
+
+
+  <rosparam command="load" file="$(find joint_state_controller)/joint_state_controller.yaml" />
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="joint_state_controller" />
+
+  <node pkg="rviz" type="rviz" name="rviz"/>
+
+<!-- First Rosbot -->
+<group ns="rosbot1">
+  <param name="robot_description" command="$(find xacro)/xacro '$(find rosbot_description)/urdf/rosbot.xacro'"/>
+  <node name="rosbot_spawn1" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model rosbot1" >
+     
+  </node> 
+   
+  <node name="rosbot_state_publisher1" pkg="robot_state_publisher" type="robot_state_publisher"/>
+</group>
+
+<!-- Second Rosbot -->
+<group ns="rosbot2">
+  <param name="robot_description" command="$(find xacro)/xacro '$(find rosbot_description)/urdf/rosbot.xacro'"/>
+  <node name="rosbot_spawn2" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model rosbot2 -x -2 -y -4 " >
+                                                                                     
+  </node>
+
+  <node name="rosbot_state_publisher2" pkg="robot_state_publisher" type="robot_state_publisher"/>
+</group>
+
+
+
+
+
+
+</launch>
