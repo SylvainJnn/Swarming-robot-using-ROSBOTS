@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>  
+
+   <!-- Arguments and parameters -->
+  <arg name="ns"  default="rosbot1"/>
+  <arg name ="robot_base_frame" default = "$(arg ns)/base_link"/>
+
+  <!-- Open the move_base node with some custom configuration files -->
+  
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+	<rosparam file="$(find rosbot_navigation)/config/costmap_common_params.yaml" command="load" ns="local_param" />
+	<rosparam file="$(find rosbot_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+	<rosparam file="$(find rosbot_navigation)/config/local_costmap_params.yaml"  command="load" />
+	<rosparam file="$(find rosbot_navigation)/config/global_costmap_params.yaml" command="load" />
+	<rosparam file="$(find rosbot_multi_sim)/config/local_costmap_params_$(arg ns).yaml"  command="load" />
+	<rosparam file="$(find rosbot_multi_sim)/config/global_costmap_params_$(arg ns).yaml" command="load" />
+	<rosparam file="$(find rosbot_navigation)/config/trajectory_planner.yaml" command="load" />
+
+	<!-- Remap if not exploring -->
+	<remap from="robot_base_frame" to="$(arg ns)/base_link"/>
+	<remap from="/map" to="$(arg ns)/map"/>
+
+  </node>
+
+</launch>
