@@ -4,14 +4,12 @@ import rospy
 # for the Odometry
 from geometry_msgs.msg import PoseStamped
 from move_base_msgs.msg import MoveBaseActionGoal
-from actionlib_msgs.msg import GoalStatusArray
-state = None
 
-def get_status(msg):
-    global state
-    state = msg.status_list[0].status #get the status of the goal, 3 is find
 
-#first need to publish soemthing before checking the call back --> it gives error right now
+# for the path planning
+#import actionlib
+#from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+
 
 # ===========================
 # Initialization of the nodes
@@ -19,7 +17,6 @@ def get_status(msg):
 
 rospy.init_node('rosbot_path_planning')
 pub_goal = rospy.Publisher('/move_base/goal',MoveBaseActionGoal,queue_size=1)
-subscriber_move_base_status = rospy.Subscriber('/move_base/status',GoalStatusArray,get_status, queue_size=1)
 goal = PoseStamped()
 
 goal_global = MoveBaseActionGoal()
@@ -31,8 +28,8 @@ goal_global = MoveBaseActionGoal()
 goal.header.frame_id = "map"
 goal.header.stamp = rospy.Time.now()
 
-goal.pose.position.x = -1
-goal.pose.position.y = 0
+goal.pose.position.x = 2
+goal.pose.position.y = -4
 goal.pose.position.z = 0
 
 goal.pose.orientation.x = 0
@@ -68,6 +65,5 @@ while not rospy.is_shutdown():
     rate.sleep()
     #pub.publish(velocity)
     print("doing my job")
-    print("state of the goal is ", state)
 
 

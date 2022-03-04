@@ -1,0 +1,59 @@
+<launch>
+    
+    <include file="$(find rosbot_ekf)/launch/rosserial_bridge.launch">
+        <arg name="serial_port" value="/dev/ttyS4"/>
+        <arg name="serial_baudrate" value="460800"/>
+    </include>
+
+
+    <!-- Launch camera and lidar (rosbot_hardware) -->
+
+    <include file="$(find astra_launch)/launch/astra.launch"></include>
+
+    <include file="$(find rplidar_ros)/launch/rplidar_a3.launch"></include>
+
+    <!-- Model of the robot (rosbot_hardware) -->
+
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find rosbot_description)/urdf/rosbot.xacro'"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+   <!--  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/> -->
+
+    <!-- Message conversion (all)-->
+
+    <include file="$(find rosbot_ekf)/launch/message_conversion.launch"/>
+
+    <include file="$(find rosbot_ekf)/launch/rosbot_ekf.launch"/>
+
+    <!-- Transform for imu -->
+    
+    <node pkg="tf" type="static_transform_publisher" name="imu_publisher" args="0 0 0.02 0 0 0 base_link imu_link 100" />
+
+
+    <node pkg="tf" type="static_transform_publisher" name="fl_publisher" args="0.05 0.11 0 0 0 0 base_link front_left_wheel 250" />
+    <node pkg="tf" type="static_transform_publisher" name="fr_publisher" args="0.05 -0.11 0 0 0 0 base_link front_right_wheel 250" />
+    <node pkg="tf" type="static_transform_publisher" name="rl_publisher" args="-0.05 0.11 0 0 0 0 base_link rear_left_wheel 250" />
+    <node pkg="tf" type="static_transform_publisher" name="rr_publisher" args="-0.05 -0.11 0 0 0 0 base_link rear_right_wheel 250" />
+
+
+    <!-- 
+    
+    <node pkg="tf" type="static_transform_publisher" name="imu_publisher" args="0 0 0.02 0 0 0 base_link imu_link 100" />
+     -->
+
+    <!-- gmapping package -->
+    <node pkg="gmapping" type="slam_gmapping" name="gmapping">
+        <param name="base_frame" value="base_link"/>
+        <param name="odom_frame" value="odom" />
+        <param name="delta" value="0.1" />
+    </node>
+
+    <!-- teleop package -->
+    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" output="screen"/>
+
+    <!-- rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" />
+
+
+</launch>

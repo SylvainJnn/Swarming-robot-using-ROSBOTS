@@ -1,0 +1,22 @@
+<launch>
+
+
+    <include file="$(find husarion_bring_up)/launch/base.launch">
+    </include>
+
+    <arg name="teach" default="true"/>
+    <arg name="recognize" default="false"/>
+
+    <arg if="$(arg teach)" name="chosen_world" value="rosbot_world_teaching"/>
+    <arg if="$(arg recognize)" name="chosen_world" value="rosbot_world_recognition"/>
+
+
+    <node pkg="find_object_2d" type="find_object_2d" name="find_object_2d">
+        <remap from="image" to="/camera/rgb/image_raw"/>
+        <param name="gui" value="$(arg teach)"/>
+        <param if="$(arg recognize)" name="objects_path" value="$(find husarion_bring_up)/pics/"/>
+    </node>
+<!--
+    <node pkg="husarion_bring_up" type="action_controller_node" name="action_controller" output="screen"/>
+-->
+</launch>

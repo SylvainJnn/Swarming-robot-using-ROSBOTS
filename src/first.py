@@ -23,7 +23,7 @@ while(not rospy.is_shutdown()):
         speed.linear.x = 0.12
     
     elif(count<6):
-        speed.linear.x  = -0.9
+        speed.linear.x  = -0.09
 
     else:
         count=0
