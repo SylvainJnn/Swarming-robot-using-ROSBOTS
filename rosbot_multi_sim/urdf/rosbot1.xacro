@@ -9,7 +9,7 @@
   <xacro:property name="cameraMass" value="0.1"/>
 
   <xacro:include filename="$(find rosbot_description)/urdf/materials.xacro" />
-  <xacro:include filename="$(find rosbot_mult _sim)/urdf/$(arg robot_namespace).gazebo" />
+  <xacro:include filename="$(find rosbot_multi_sim)/urdf/$(arg robot_namespace).gazebo" />
 
   <link name="base_link"></link> 
   <joint name="base_link_joint" type="fixed">
