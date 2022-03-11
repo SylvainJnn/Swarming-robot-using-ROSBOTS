@@ -25,4 +25,28 @@
     <param name="update_min_a" value="0.2"/>
     <param name="min_particles" value="500"/>
   </node>
+  
+  <!-- Move base -->
+  <!-- Add by Lucas -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base_$(arg ns)" output="screen">
+    <rosparam file="$(find rosbot_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rosbot_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rosbot_navigation)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rosbot_navigation)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rosbot_navigation)/config/trajectory_planner.yaml" command="load" />
+    <rosparam file="$(find rosbot_multi_sim)/config/local_costmap_params_$(arg ns).yaml"  command="load" />
+    <rosparam file="$(find rosbot_multi_sim)/config/global_costmap_params_$(arg ns).yaml" command="load" />
+<!--
+    <remap from="$(arg ns)/cmd_vel" to="$(arg ns)/cmd_vel"/>
+    <remap from="$(arg ns)/odom" to="$(arg_ns)/odom"/>
+    <remap from="$(arg ns)/scan" to="$(arg ns)/scan"/>
+    <param name="move_base/DWAPlannerROS/yaw_goal_tolerance" value="1.0"/>
+    <param name="move_base/DWAPlannerROS/xy_goal_tolerance" value="1.0"/>
+-->
+    <remap from="cmd_vel" to="cmd_vel"/>
+    <remap from="odom" to="odom"/>
+    <remap from="scan" to="/scan"/>
+    <param name="move_base/DWAPlannerROS/yaw_goal_tolerance" value="1.0"/>
+    <param name="move_base/DWAPlannerROS/xy_goal_tolerance" value="1.0"/>
+  </node>
 </launch>
