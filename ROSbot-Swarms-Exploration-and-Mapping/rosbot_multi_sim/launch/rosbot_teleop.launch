@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="rosbot_multi_sim" type="teleop_rosbot1.py" name="teleop_rosbot1"  output="screen">
+    <param name="scale_linear" value="1.0" type="double"/>
+    <param name="scale_angular" value="1.5" type="double"/>
+  </node>
+</launch>
+
