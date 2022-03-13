@@ -16,7 +16,9 @@ from move_base_msgs.msg import MoveBaseActionGoal
 # ===========================
 
 rospy.init_node('rosbot_path_planning')
-pub_goal = rospy.Publisher('/move_base/goal',MoveBaseActionGoal,queue_size=1)
+#pub_goal = rospy.Publisher('/move_base/goal',MoveBaseActionGoal,queue_size=1)
+pub_goal = rospy.Publisher('/rosbot1/move_base_simple/goal',MoveBaseActionGoal,queue_size=1)
+
 goal = PoseStamped()
 
 goal_global = MoveBaseActionGoal()

@@ -22,7 +22,6 @@
 -->
   <node unless="$(arg use_gazebo)" pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0 3.14 0 0 base_link laser 100" />
 
-  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" output="screen"/>
 
   <node pkg="move_base" type="move_base" name="move_base" output="screen">
     <param name="controller_frequency" value="10.0"/>
@@ -32,15 +31,18 @@
     <rosparam file="$(find firstros)/config/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find firstros)/config/trajectory_planner.yaml" command="load" />
   </node>
+<!--
+  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" output="screen"/>
+
 
   <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="screen">
     <rosparam file="$(find firstros)/config/exploration.yaml" command="load" />
   </node>
-
+-->
   <include file="$(find firstros)/launch/map_server.launch"/>
 
   <include file="$(find firstros)/launch/amcl_only.launch"/>
 
-  <node pkg="rviz" type="rviz" name="rviz"/>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find firstros)/rviz/map_navigation.rviz" required="true" output="screen" />
 
 </launch>
