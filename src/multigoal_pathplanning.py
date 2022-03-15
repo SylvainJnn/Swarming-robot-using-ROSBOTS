@@ -27,7 +27,7 @@ class multi_goal_path_planning:
         self.goal_list = [] #self.array([])
 
     def give_rosbot_name(self, rosbot_number):
-        if(rosbot_number==0):
+        if(rosbot_number == 0):
             return("")
         else:
             return("/rosbot" + rosbot_number)
@@ -36,32 +36,34 @@ class multi_goal_path_planning:
         self.state = status_msg.status_list[0].status #get the status of the goal, 3 is find
         self.current_goal_id = status_msg.status_list[0].goal_id.id
 
+    def check_robot(self): # check /status and computer vision
+        None    #return true or false i guess
 
     #first need to publish soemthing before checking the call back --> it gives error right now
-    def pub_firsttime(self):
+    def pub_firsttime(self):#if it is the first time we just wait for the state to not be 3
         while(self.state != 3):
             self.pub_goal.publish(self.goal_action)
             rospy.sleep(1)
             print("I'm on it 1")
-        self.goal_counter += 1
+        self.goal_counter += 1      #goal is reached --> increment the counter
 
     def pub_function(self):
         #divided into 2 functions
-        while(self.current_goal_id != self.new_goal_id):
-            self.pub_goal.publish(self.goal_action)
+        while(self.current_goal_id != self.new_goal_id):    #check if the goal has been update by checking if the id of the goal in the topic is the same as the one we sent from this file 
+            self.pub_goal.publish(self.goal_action)         #publish the goal
             rospy.sleep(1)
             print("i'm checking bro")
             print("goal number ", self.goal_counter)
             print(self.current_goal_id , "\n\n",self.new_goal_id,self.current_goal_id != self.new_goal_id)
         #we can add a if to check if msg.goal id the the same as new_goal
-        while(self.state != 3):
+        while(self.state != 3):                             #the goal is published --> we check if it arrived, later we can create a function that check both the status and the computer vision
             self.pub_goal.publish(self.goal_action)#normally we don't need this line anymore
             rospy.sleep(1)
             print("I'm on it 2")
-        self.goal_counter += 1
+        self.goal_counter += 1      #goal is reached --> increment the counter
 
     #=============== GOAL #===============
-    def create_goal(self, x, y, z, roll, pitch, yaw, w):
+    def create_goal(self, x, y, z, roll, pitch, yaw, w):#create a goal and put it in the goal list
         new_goal = robot_goal(x, y, z, roll, pitch, yaw, w)
         self.goal_list.append(new_goal)
 
@@ -86,28 +88,31 @@ class multi_goal_path_planning:
         self.goal_action.goal_id.id = "goal number" + str(self.goal_counter)
         self.new_goal_id = self.goal_action.goal_id.id
 
-        self.goal_action.goal.target_pose = self.goal_pose
+        self.goal_action.goal.target_pose = self.goal_pose  #update the goal_action
 
-    def send_goal(self):
-        self.update_goal(self.goal_list[0])
-    
-        if(self.goal_counter == 0):
+    def send_goal(self):#function that call the publisher 
+        self.update_goal(self.goal_list[self.goal_counter])#put it somewhere else ?//#to update the goal we can either call self.goal_list[-1] wich take the last one if is add goal step by step OR we call self.goal_list[self.goal_counter]
+            
+        if(self.goal_counter == 0):#if it is the irst time we call a specific publisher function
+            self.update_goal(self.goal_list[0])
             self.pub_firsttime()
         
         else:
-            self.update_goal(self.goal_list[self.goal_counter])#to update the goal we can either call self.goal_list[-1] wich take the last one if is add goal step by step OR we call self.goal_list[self.goal_counter]
             self.pub_function()
+
+    def send_goal_forloop(self):
+        for i in range(len(self.goal_list)):
+            self.send_goal()
+            print("I'm running the foor loop")
 
     def main(self):
         #rospy.sleep(2)
         self.create_goal(1,0,0,0,0,0,1)
         self.create_goal(2,2,0,0,0,0,1)
-        self.send_goal()
+        self.create_goal(-1,0,0,0,0,0,1)
         rospy.sleep(1)
-        self.send_goal()
-        print("I'm running")
+        self.send_goal_forloop()
         rospy.spin()
-
 
 if __name__ == "__main__":
     my_goals = multi_goal_path_planning(0)
