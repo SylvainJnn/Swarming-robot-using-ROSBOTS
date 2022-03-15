@@ -6,13 +6,15 @@ from geometry_msgs.msg import PoseStamped
 from move_base_msgs.msg import MoveBaseActionGoal
 from actionlib_msgs.msg import GoalStatusArray
 
-
+from robot_goal import robot_goal
 
 class multi_goal_path_planning:
-    def __init__(self):
-        rospy.init_node('rosbot_path_planning')
-        self.pub_goal = rospy.Publisher('/move_base/goal',MoveBaseActionGoal,queue_size=1)
-        self.subscriber_move_base_status = rospy.Subscriber('/move_base/status',GoalStatusArray,self.get_status, queue_size=1)
+    def __init__(self, rosbot_number):
+        self.rosbot_name = self.give_rosbot_name(rosbot_number)
+
+        rospy.init_node('rosbot_path_planning_'+self.rosbot_name)
+        self.pub_goal = rospy.Publisher(self.rosbot_name + '/move_base/goal', MoveBaseActionGoal, queue_size=1)
+        self.subscriber_move_base_status = rospy.Subscriber(self.rosbot_name + '/move_base/status', GoalStatusArray, self.get_status, queue_size=1)
         
         self.goal_pose = PoseStamped()
         self.goal_action = MoveBaseActionGoal()
@@ -22,10 +24,13 @@ class multi_goal_path_planning:
         self.state = None
         self.goal_counter = 0
 
-        #rospy.sleep(2)
-        self.send_goal()
-        rospy.sleep(1)
-        self.send_goal()
+        self.goal_list = [] #self.array([])
+
+    def give_rosbot_name(self, rosbot_number):
+        if(rosbot_number==0):
+            return("")
+        else:
+            return("/rosbot" + rosbot_number)
 
     def get_status(self, status_msg):
         self.state = status_msg.status_list[0].status #get the status of the goal, 3 is find
@@ -55,19 +60,24 @@ class multi_goal_path_planning:
             print("I'm on it 2")
         self.goal_counter += 1
 
-    def update_goal(self, x, y, z, roll, pitch, yaw, w):#goal_action is a MoveBaseActionGoal, it includes a PoseStamped object (=goal_pose) with the same information
+    #=============== GOAL #===============
+    def create_goal(self, x, y, z, roll, pitch, yaw, w):
+        new_goal = robot_goal(x, y, z, roll, pitch, yaw, w)
+        self.goal_list.append(new_goal)
+
+    def update_goal(self, next_robot_goal):#goal_action is a MoveBaseActionGoal, it includes a PoseStamped object (=goal_pose) with the same information
         # ...
         self.goal_pose.header.frame_id = "map"
         self.goal_pose.header.stamp = rospy.Time.now()
 
-        self.goal_pose.pose.position.x = x
-        self.goal_pose.pose.position.y = y
-        self.goal_pose.pose.position.z = z
+        self.goal_pose.pose.position.x = next_robot_goal.x
+        self.goal_pose.pose.position.y = next_robot_goal.y
+        self.goal_pose.pose.position.z = next_robot_goal.z
 
-        self.goal_pose.pose.orientation.x = roll
-        self.goal_pose.pose.orientation.y = pitch
-        self.goal_pose.pose.orientation.z = yaw
-        self.goal_pose.pose.orientation.w = w
+        self.goal_pose.pose.orientation.x = next_robot_goal.roll
+        self.goal_pose.pose.orientation.y = next_robot_goal.pitch
+        self.goal_pose.pose.orientation.z = next_robot_goal.yaw
+        self.goal_pose.pose.orientation.w = next_robot_goal.w
 
         #...
         self.goal_action.header = self.goal_pose.header
@@ -79,19 +89,27 @@ class multi_goal_path_planning:
         self.goal_action.goal.target_pose = self.goal_pose
 
     def send_goal(self):
-
-        self.update_goal(1,0,0,0,0,0,1)
+        self.update_goal(self.goal_list[0])
     
         if(self.goal_counter == 0):
             self.pub_firsttime()
         
         else:
-            self.update_goal(2,2,0,0,0,0,1)
+            self.update_goal(self.goal_list[self.goal_counter])#to update the goal we can either call self.goal_list[-1] wich take the last one if is add goal step by step OR we call self.goal_list[self.goal_counter]
             self.pub_function()
 
+    def main(self):
+        #rospy.sleep(2)
+        self.create_goal(1,0,0,0,0,0,1)
+        self.create_goal(2,2,0,0,0,0,1)
+        self.send_goal()
+        rospy.sleep(1)
+        self.send_goal()
+        print("I'm running")
+        rospy.spin()
 
 
 if __name__ == "__main__":
-    my_goals = multi_goal_path_planning()
-    print("I'm running")
-    rospy.spin()
+    my_goals = multi_goal_path_planning(0)
+    my_goals.main()
+    
