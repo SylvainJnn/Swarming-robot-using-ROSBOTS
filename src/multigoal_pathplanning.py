@@ -11,8 +11,9 @@ from robot_goal import robot_goal
 class multi_goal_path_planning:
     def __init__(self, rosbot_number):
         self.rosbot_name = self.give_rosbot_name(rosbot_number)
-
-        rospy.init_node('rosbot_path_planning_'+self.rosbot_name)
+        self.node_name = 'rosbot_path_planning_'+str(1)
+        print(self.node_name)
+        rospy.init_node(self.node_name)
         self.pub_goal = rospy.Publisher(self.rosbot_name + '/move_base/goal', MoveBaseActionGoal, queue_size=1)
         self.subscriber_move_base_status = rospy.Subscriber(self.rosbot_name + '/move_base/status', GoalStatusArray, self.get_status, queue_size=1)
         
@@ -30,7 +31,7 @@ class multi_goal_path_planning:
         if(rosbot_number == 0):
             return("")
         else:
-            return("/rosbot" + rosbot_number)
+            return("/rosbot" + str(rosbot_number))
 
     def get_status(self, status_msg):
         self.state = status_msg.status_list[0].status #get the status of the goal, 3 is find
@@ -114,7 +115,18 @@ class multi_goal_path_planning:
         self.send_goal_forloop()
         rospy.spin()
 
+    def main1(self):
+        self.create_goal(-1,0,0,0,0,0,1)
+        self.send_goal()
+
+    def main2(self):
+        self.create_goal(-1,-1,0,0,0,0,1)
+        self.send_goal()
+
 if __name__ == "__main__":
-    my_goals = multi_goal_path_planning(0)
+    my_goals = multi_goal_path_planning(1)
     my_goals.main()
-    
+    #robot1 = multi_goal_path_planning(1)
+    #robot2 = multi_goal_path_planning(2)
+    #robot1.main1()
+    #robot1.main2()
