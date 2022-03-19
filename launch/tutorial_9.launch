@@ -1,7 +1,12 @@
 <launch>
 
   <arg name="rosbot_pro" default="false" />
-  <arg name="use_gazebo" default="false" />
+  <arg name="use_gazebo" default="true" />
+
+
+
+  <!-- Load RVIZ configuration -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tutorial_pkg)/rvis_config/tutorial_config.rviz" required="true" />
 
   <!-- Gazebo -->
   <group if="$(arg use_gazebo)">
@@ -48,6 +53,6 @@
 
   <include file="$(find tutorial_pkg)/launch/amcl_only.launch"/>
 
-  <node pkg="rviz" type="rviz" name="rviz"/>
+  <!-- <node pkg="rviz" type="rviz" name="rviz"/> -->
 
 </launch>
