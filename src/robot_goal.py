@@ -1,3 +1,4 @@
+#a class that contains the parameter for a goal, also has a method to print the goal
 class robot_goal:
     def __init__(self, new_x, new_y, new_z, new_roll, new_pitch, new_yaw, new_w):
         self.x = new_x

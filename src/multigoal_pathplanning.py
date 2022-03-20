@@ -45,12 +45,13 @@ class multi_goal_path_planning:
         while(self.state != 3):
             self.pub_goal.publish(self.goal_action)
             rospy.sleep(1)
-            print("I'm on it 1")
+            print(self.rosbot_name )
         self.goal_counter += 1      #goal is reached --> increment the counter
 
     def pub_function(self):
         #divided into 2 functions
-        while(self.current_goal_id != self.new_goal_id):    #check if the goal has been update by checking if the id of the goal in the topic is the same as the one we sent from this file 
+        while(self.current_goal_id != self.new_goal_id):    #same_id?()#check if the goal has been update by checking if the id of the goal in the topic is the same as the one we sent from this file 
+            print(self.rosbot_name )
             self.pub_goal.publish(self.goal_action)         #publish the goal
             rospy.sleep(1)
             print("i'm checking bro")
@@ -116,17 +117,21 @@ class multi_goal_path_planning:
         rospy.spin()
 
     def main1(self):
-        self.create_goal(-1,0,0,0,0,0,1)
+        self.create_goal(-2,-2,0,0,0,0,1)
         self.send_goal()
 
     def main2(self):
-        self.create_goal(-1,-1,0,0,0,0,1)
+        self.create_goal(2,2,0,0,0,0,1)
         self.send_goal()
 
 if __name__ == "__main__":
-    my_goals = multi_goal_path_planning(1)
-    my_goals.main()
-    #robot1 = multi_goal_path_planning(1)
-    #robot2 = multi_goal_path_planning(2)
-    #robot1.main1()
-    #robot1.main2()
+    #my_goals = multi_goal_path_planning(0)
+    #my_goals.main()
+    robot1 = multi_goal_path_planning(1)
+    robot2 = multi_goal_path_planning(2)
+    robot1.main1()
+    robot2.main2()
+
+if __name__ == "__main2__":#for service does rospy.Service(...) need to be the same as rospy.nodes() ? 
+    goal_service = rospy.Service('/rosbots_goals_server', , A function that call the class (or the class directly ? ))
+    rospy.spin()

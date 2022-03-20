@@ -44,5 +44,7 @@
   <include file="$(find firstros)/launch/amcl_only.launch"/>
 
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find firstros)/rviz/map_navigation.rviz" required="true" output="screen" />
-
+<!--
+  <noce pkg="firstros" type="multigoal_pathplanning.py" name="multi_goal" output="screen"/>
+-->
 </launch>

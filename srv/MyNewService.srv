@@ -1,0 +1,7 @@
+int32 robot_number
+float64[] global
+
+---
+
+bool sucess
+string message
