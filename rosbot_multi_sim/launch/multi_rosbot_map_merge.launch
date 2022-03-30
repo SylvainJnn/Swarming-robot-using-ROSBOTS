@@ -37,7 +37,9 @@
     <param name="init_pose_yaw" value="$(arg rosbot2_yaw)"  />
   </group>
 
+
   <!-- Run the multirobot_map_merging node -->
+<!--
   <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge">
     <param name="robot_map_topic" value="map"/>
     <param name="robot_namespace" value="rosbot"/>
@@ -48,17 +50,35 @@
     <param name="discovery_rate" value="0.05"/>
     <param name="estimation_rate" value="0.1"/>
     <param name="estimation_confidence" value="1.0"/>
-
-    <!-- remap the individual maps from the local map (published by SLAM) to the expanded map (published by the map_expansion node)
+  </node>
+--> 
+<!-- before it was inside the node above -->
+<!-- remap the individual maps from the local map (published by SLAM) to the expanded map (published by the map_expansion node)
     <remap from = "$(arg namespace1)/map" to = "new_$(arg namespace1)_map"/>
     <remap from = "$(arg namespace2)/map" to = "new_$(arg namespace2)_map"/> -->
-  </node>
 
-  <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg namespace1)_tf_broadcaster"  args="0 0 0 0 0 0 /map /$(arg namespace1)/map 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg namespace1)_tf_broadcaster" args="0 0 0 0 0 0 /map /$(arg namespace1)/map 100"/>
   <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg namespace2)_tf_broadcaster" args="0 0 0 0 0 0 /map /$(arg namespace2)/map 100"/>
-  <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace1)_tf_broadcaster_map_$(arg namespace1)_map"                args="0 0 0 0 0 0 /map /$(arg namespace1)/$(arg namespace1)/map"/>
-  <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace2)_tf_broadcaster_map_$(arg namespace2)_map"                args="0 0 0 0 0 0  /map /$(arg namespace2)/$(arg namespace2)/map"/>
+
+<!-- Commented by Lucas to try -->
+<!-- Those twos are working : -->
+<!-- KEEP THEM-->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace1)_tf_broadcaster_map_$(arg namespace1)_map" args="0 0 0 0 0 0 /map /$(arg namespace1)/$(arg namespace1)/map"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace2)_tf_broadcaster_map_$(arg namespace2)_map" args="0 0 0 0 0 0  /map /$(arg namespace2)/$(arg namespace2)/map"/>
 	
+<!--
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace1)_tf_broadcaster_map_$(arg namespace1)_map" args="0 0 0 0 0 0 /map /$(arg namespace1)/move_base"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace2)_tf_broadcaster_map_$(arg namespace2)_map" args="0 0 0 0 0 0  /map /$(arg namespace2)/move_base"/>
+	-->
+
+
+
+
+
+
+
+
   <!--node pkg="tf" type="static_transform_publisher" name="world_to_new_$(arg namespace1)_map" args="0 0 0 0 0 0 /map /new_$(arg namespace1)_map 100"/>
   <node pkg="tf" type="static_transform_publisher" name="world_to__new_$(arg namespace2)_map" args="0 0 0 0 0 0 /map /new_$(arg namespace2)_map 100"/-->
 </launch>

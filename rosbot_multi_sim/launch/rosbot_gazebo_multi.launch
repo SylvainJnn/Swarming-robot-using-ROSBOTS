@@ -8,7 +8,9 @@
     <param name="tf_prefix" value="rosbot1"/>
     
     <include file="$(find rosbot_multi_sim)/launch/the_rosbot.launch" >
-      <arg name="init_pose" value="-x 1 -y 1 -z 0" />
+    <!-- Augustin version 
+      <arg name="init_pose" value="-x 1 -y 1 -z 0" /> -->
+      <arg name="init_pose" value="-x 1 -y 0 -z 0" />
       <arg name="robot_name"  value="Rosbot1" />
       <arg name="robot_id"  value="1"/>
     </include>
@@ -19,7 +21,9 @@
     <param name="tf_prefix" value="rosbot2"/>
     
     <include file="$(find rosbot_multi_sim)/launch/the_rosbot.launch" >
-      <arg name="init_pose" value="-x -1 -y 1 -z 0" />
+    <!-- Augustin version
+      <arg name="init_pose" value="-x -1 -y 1 -z 0" /> -->
+      <arg name="init_pose" value="-x -1 -y 0 -z 0" />
       <arg name="robot_name"  value="Rosbot2" />
       <arg name="robot_id"  value="2" />
     </include>
