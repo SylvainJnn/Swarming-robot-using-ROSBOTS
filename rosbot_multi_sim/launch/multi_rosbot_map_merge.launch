@@ -7,6 +7,7 @@
   <!-- Namespaces -->
   <arg name="namespace1"  default="rosbot1"/>
   <arg name="namespace2" default="rosbot2"/>
+  <arg name="namespace3" default="rosbot3"/>
 
   <!-- Initial position for the first rosbot -->
   <arg name="$(arg namespace1)_x_pos" default=" 1.0"/>
@@ -19,6 +20,12 @@
   <arg name="$(arg namespace2)_y_pos" default=" 1.0"/>
   <arg name="$(arg namespace2)_z_pos" default=" 0.0"/>
   <arg name="$(arg namespace2)_yaw"   default=" 0.0"/>
+
+    <!-- Initial position for the third rosbot -->
+  <arg name="$(arg namespace3)_x_pos" default=" 0.0"/>
+  <arg name="$(arg namespace3)_y_pos" default=" 0.0"/>
+  <arg name="$(arg namespace3)_z_pos" default=" 0.0"/>
+  <arg name="$(arg namespace3)_yaw"   default=" 0.0"/>
   
 
   <!-- Pass the first rosbot's position tb3_0/map_merge  -->
@@ -36,6 +43,15 @@
     <param name="init_pose_z"   value="$(arg rosbot2_z_pos)"/>
     <param name="init_pose_yaw" value="$(arg rosbot2_yaw)"  />
   </group>
+
+    <!-- Pass the third rosbot's position tb3_1/map_merge  -->
+  <group ns="$(arg namespace3)/map_merge">
+    <param name="init_pose_x"   value="$(arg rosbot3_x_pos)"/>
+    <param name="init_pose_y"   value="$(arg rosbot3_y_pos)"/>
+    <param name="init_pose_z"   value="$(arg rosbot3_z_pos)"/>
+    <param name="init_pose_yaw" value="$(arg rosbot3_yaw)"  />
+  </group>
+
 
 
   <!-- Run the multirobot_map_merging node -->
@@ -60,22 +76,19 @@
 
   <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg namespace1)_tf_broadcaster" args="0 0 0 0 0 0 /map /$(arg namespace1)/map 100"/>
   <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg namespace2)_tf_broadcaster" args="0 0 0 0 0 0 /map /$(arg namespace2)/map 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg namespace3)_tf_broadcaster" args="0 0 0 0 0 0 /map /$(arg namespace3)/map 100"/>
 
 <!-- Commented by Lucas to try -->
 <!-- Those twos are working : -->
 <!-- KEEP THEM-->
   <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace1)_tf_broadcaster_map_$(arg namespace1)_map" args="0 0 0 0 0 0 /map /$(arg namespace1)/$(arg namespace1)/map"/>
   <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace2)_tf_broadcaster_map_$(arg namespace2)_map" args="0 0 0 0 0 0  /map /$(arg namespace2)/$(arg namespace2)/map"/>
+	<node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace3)_tf_broadcaster_map_$(arg namespace3)_map" args="0 0 0 0 0 0  /map /$(arg namespace3)/$(arg namespace3)/map"/>
 	
 <!--
   <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace1)_tf_broadcaster_map_$(arg namespace1)_map" args="0 0 0 0 0 0 /map /$(arg namespace1)/move_base"/>
   <node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace2)_tf_broadcaster_map_$(arg namespace2)_map" args="0 0 0 0 0 0  /map /$(arg namespace2)/move_base"/>
 	-->
-
-
-
-
-
 
 
 

@@ -28,4 +28,19 @@
       <arg name="robot_id"  value="2" />
     </include>
   </group>
+
+
+  <!-- BEGIN ROSBOT 3 -->
+  <group ns="rosbot3">
+    <param name="tf_prefix" value="rosbot3"/>
+    
+    <include file="$(find rosbot_multi_sim)/launch/the_rosbot.launch" >
+    <!-- Augustin version
+      <arg name="init_pose" value="-x -1 -y 1 -z 0" /> -->
+      <arg name="init_pose" value="-x 0 -y 0 -z 0" />
+      <arg name="robot_name"  value="Rosbot3" />
+      <arg name="robot_id"  value="3" />
+    </include>
+  </group>
+
 </launch>

@@ -12,4 +12,5 @@ local_costmap:
   origin_x: -1.5
   origin_y: -1.5
   resolution: 0.01
-  inflation_radius: 1.0
+  inflation_radius: 0.5 #1.0
+  cost_scaling_factor: 2

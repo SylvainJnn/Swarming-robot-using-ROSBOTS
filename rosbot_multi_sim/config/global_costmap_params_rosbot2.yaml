@@ -11,5 +11,7 @@ global_costmap:
   origin_y: -7.5
   static_map: false
   rolling_window: true
-  inflation_radius: 2.5
+  inflation_radius: 0.5 #2.5
   resolution: 0.01
+  
+  cost_scaling_factor: 2

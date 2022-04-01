@@ -1,6 +1,6 @@
 global_costmap:
-  global_frame: rosbot1/map
-  robot_base_frame: rosbot1/base_link
+  global_frame: rosbot3/map
+  robot_base_frame: rosbot3/base_link
 
   update_frequency: 0.5
   publish_frequency: 1.5
