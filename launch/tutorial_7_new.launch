@@ -43,4 +43,10 @@
     <rosparam file="$(find tutorial_pkg)/config/trajectory_planner.yaml" command="load" />
   </node>
 
+<!-- Import the map-->
+<node pkg="explore_lite" type="explore" respawn="true" name="explore" output="screen">
+  <rosparam file="$(find tutorial_pkg)/config/exploration.yaml" command="load" />
+</node>
+<include file="$(find tutorial_pkg)/launch/map_server.launch"/>
+<include file="$(find tutorial_pkg)/launch/amcl_only.launch"/>
 </launch>

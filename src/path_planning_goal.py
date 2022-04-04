@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 
 
@@ -63,7 +63,4 @@ while not rospy.is_shutdown():
     
     rate.sleep()
     #pub.publish(velocity)
-    pub_goal.publish(goal))
-
-
-
+    pub_goal.publish(goal)
