@@ -52,7 +52,7 @@ Goal.target_pose.header.stamp = rospy.Time.now()
 Goal.target_pose.header.frame_id = 'map'
 
 Goal.target_pose.pose.position.x = 2
-Goal.target_pose.pose.position.y = 3
+Goal.target_pose.pose.position.y = 2
 Goal.target_pose.pose.position.z = 0
 
 Goal.target_pose.pose.orientation.x = 0

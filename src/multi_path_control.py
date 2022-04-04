@@ -48,7 +48,7 @@ def next_goal1():
   Goal1.target_pose.pose.position.x -=0.5
   Goal1.target_pose.pose.position.y = 0.625
   client1.send_goal(Goal1, feedback_cb=feedback_callback1)
-  #client1.wait_for_result()
+  client1.wait_for_result()
 
 
 # Goal 2
