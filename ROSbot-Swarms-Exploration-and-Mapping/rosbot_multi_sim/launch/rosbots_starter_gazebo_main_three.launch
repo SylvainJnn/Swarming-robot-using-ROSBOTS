@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+	<arg name="namespace1"  default="rosbot1"/>
+	<arg name="namespace2"  default="rosbot2"/>
+	<arg name="namespace3"  default="rosbot3"/>
+	<arg name="known_initial_pos"  default="true"/>
+	
+	<include file="$(find rosbot_multi_sim)/launch/rosbot_gazebo_multi_three.launch"></include>
+	<!--
+	<include file="$(find rosbot_gazebo)/launch/rosbot_world.launch"></include>
+	-->
+	<!-- MAZE WORLD MAP
+	<include file="$(find rosbot_gazebo)/launch/maze_world.launch"></include>
+	-->
+	<include file="$(find rosbot_gazebo)/launch/rosbot_world.launch"></include>
+	
+    <!-- Open SLAM gmapping for each rosbot here -->
+
+	   <!-- gmapping package -->
+
+	<group ns ="$(arg namespace1)">
+		<include file="$(find rosbot_multi_sim)/launch/gmapping.launch">
+			<arg name="robot_name" value="$(arg namespace1)" />
+			<arg name="set_base_frame" value="$(arg namespace1)/base_link" />
+			<arg name="set_odom_frame" value="$(arg namespace1)/odom" />
+			<arg name="set_map_frame" value="$(arg namespace1)/map" />  
+		</include>
+  		<node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace1)_tf_broadcaster_map_$(arg namespace1)_map_merged" args="0 0 0 0 0 0 /$(arg namespace1)/$(arg namespace1)/map /$(arg namespace1)/map "/>
+	</group>
+
+	<group ns ="$(arg namespace2)">
+		<include file="$(find rosbot_multi_sim)/launch/gmapping.launch">
+			<arg name="robot_name" value="$(arg namespace2)" />
+			<arg name="set_base_frame" value="$(arg namespace2)/base_link" />
+			<arg name="set_odom_frame" value="$(arg namespace2)/odom" />
+			<arg name="set_map_frame" value="$(arg namespace2)/map" /> 
+		</include>
+  		<node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace2)_tf_broadcaster_map_$(arg namespace2)_map_merged" args="0 0 0 0 0 0 /$(arg namespace2)/$(arg namespace2)/map /$(arg namespace2)/map "/>
+	</group>
+
+	<group ns ="$(arg namespace3)">
+		<include file="$(find rosbot_multi_sim)/launch/gmapping.launch">
+			<arg name="robot_name" value="$(arg namespace3)" />
+			<arg name="set_base_frame" value="$(arg namespace3)/base_link" />
+			<arg name="set_odom_frame" value="$(arg namespace3)/odom" />
+			<arg name="set_map_frame" value="$(arg namespace3)/map" />  
+		</include>
+  		<node pkg="tf2_ros" type="static_transform_publisher" name="map_$(arg namespace3)_tf_broadcaster_map_$(arg namespace3)_map_merged" args="0 0 0 0 0 0 /$(arg namespace3)/$(arg namespace3)/map /$(arg namespace3)/map "/>
+	</group>
+
+
+
+	<!-- Merge the 2 Rosbot Maps -->
+	<!-- Commented by Lucas --> 
+	
+	<include file="$(find rosbot_multi_sim)/launch/multi_rosbot_map_merge_three.launch" />
+	<!-- ALREADY REGISTER MAP FOR THE MAZE 
+	<include file="$(find tutorial_pkg)/launch/map_server.launch"/>
+	-->
+	<include file="$(find tutorial_pkg)/launch/map_server_world.launch"/>
+	
+	
+	<!-- Show in Rviz -->   
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find rosbot_multi_sim)/rviz/rosbots_three.rviz" required="true" output="screen" />		
+	
+
+	<!-- Open move_base for each robot in their ns -->
+	<group ns ="$(arg namespace1)">
+		<include file="$(find rosbot_multi_sim)/launch/amcl_rosbots_three.launch">
+			<arg name="ns"  value="$(arg namespace1)"/>
+		</include>	
+	<!--
+		<include file="$(find rosbot_multi_sim)/launch/move_base_rosbots.launch">
+			<arg name="ns"  value="$(arg namespace1)"/>
+		</include>
+	-->	
+	</group>
+
+	<group ns ="$(arg namespace2)">
+		<include file="$(find rosbot_multi_sim)/launch/amcl_rosbots_three.launch">
+			<arg name="ns"  value="$(arg namespace2)"/>
+		</include>
+
+		<!--
+		<include file="$(find rosbot_multi_sim)/launch/move_base_rosbots.launch">
+			<arg name="ns"  value="$(arg namespace2)"/>
+		</include>
+		-->
+	</group>
+
+	<group ns ="$(arg namespace3)">
+		<include file="$(find rosbot_multi_sim)/launch/amcl_rosbots_three.launch">
+			<arg name="ns"  value="$(arg namespace3)"/>
+		</include>
+		<!--
+		<include file="$(find rosbot_multi_sim)/launch/move_base_rosbots.launch">
+			<arg name="ns"  value="$(arg namespace1)"/>
+		</include>
+		-->	
+	</group>
+
+
+	<!-- Open Exploration for each rosbot here-->
+	<!-- Control The Rosbot via Teleop-->
+	<group ns = "$(arg namespace1)">
+    		<include file="$(find rosbot_navigation)/launch/rosbot_teleop.launch"/>
+  	</group>
+
+
+	
+</launch>      
