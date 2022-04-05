@@ -27,7 +27,7 @@ class multi_goal_path_planning:
         self.Goal = MoveBaseGoal()  # create Goals to send to the action server
         
         self.goal_list = [] #self.array([])
-        self.goal_counter = 1
+        self.goal_counter = 0
 
         #create a "ctrl_c" variable and initialise it to False to be used in shutting down our node later.
         self.ctrl_c = False
@@ -62,7 +62,6 @@ class multi_goal_path_planning:
         self.create_goal(-1,0,0,0,0,0,1)
         self.update_goal(self.goal_list[self.goal_counter])
         self.client.send_goal(self.Goal, feedback_cb=self.feedback_callback)
-        #self.client.wait_for_result()
 
     # =====================
     # Creation of the goals
@@ -95,6 +94,7 @@ class multi_goal_path_planning:
             else: 
                 print('=== NEXT GOAL ===')
             print('[Rosbot%d] going to goal number %d'%(self.rosbot_number,self.goal_counter))
+            self.goal_list[self.goal_counter].print_goal()
         self.goal_counter += 1 
         self.client.wait_for_result()
         if(self.goal_counter < len(self.goal_list)):
@@ -110,7 +110,9 @@ class multi_goal_path_planning:
 if __name__ == '__main__': #check to ensure that the script being run is the main executable
     class_instance = multi_goal_path_planning(1) #create an instance of the multi_goal_path_planning() class 
     class_instance2 = multi_goal_path_planning(2)
+    #class_instance3 = multi_goal_path_planning(3)
     try:
+        #class_instance3.main()
         class_instance2.main()
         class_instance.main()
         rospy.spin()            # Create a loop that will keep the program in execution
