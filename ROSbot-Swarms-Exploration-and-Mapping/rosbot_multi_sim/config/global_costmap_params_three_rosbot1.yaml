@@ -1,0 +1,17 @@
+global_costmap:
+  global_frame: rosbot1/map
+  robot_base_frame: rosbot1/base_link
+
+  update_frequency: 0.5
+  publish_frequency: 1.5
+  transform_tolerance: 0.5
+  width: 15
+  height: 15
+  origin_x: -7.5
+  origin_y: -7.5
+  static_map: false
+  rolling_window: true
+  inflation_radius: 0.5 #2.5
+  resolution: 0.01
+  
+  cost_scaling_factor: 2
