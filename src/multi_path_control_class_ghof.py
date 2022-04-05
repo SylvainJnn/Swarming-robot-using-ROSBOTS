@@ -3,7 +3,6 @@
 # =============================================
 # Multi Rosbots Control : Go in different goals
 # =============================================
-from turtle import st
 import rospy
 # for the path planning
 import actionlib
