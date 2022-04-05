@@ -48,18 +48,25 @@ class multi_goal_path_planning:
         print("shutting down the programme ...")
 
     def main(self): #define the functionality of the main loop, which will run continuously until the node is shut down
-        # To send the rosbots to different goals
-        #if(self.rosbot_name == 1):
-            #self.create_goal(2,2,0,0,0,0,1)
-            #self.create_goal(2,4,0,0,0,0,1)
-        #else:
-            #self.create_goal(-2,-2,0,0,0,0,1)
-            #self.create_goal(-2,-4,0,0,0,0,1)
-        # To send the rosbots to the same goal
+        # To send the rosbots to different goals (uncomment)
+        if(self.rosbot_number == 1):
+            self.create_goal(2,2,0,0,0,0,1)
+            self.create_goal(2,4,0,0,0,0,1)
+            self.create_goal(2,6,0,0,0,0,1)
+        elif (self.rosbot_number == 2):
+            self.create_goal(-2,-2,0,0,0,0,1)
+            self.create_goal(-2,-4,0,0,0,0,1)
+            self.create_goal(-2,-6,0,0,0,0,1)
+        else: 
+            self.create_goal(2,-2,0,0,0,0,1)
+            self.create_goal(2,-4,0,0,0,0,1)
+            self.create_goal(2,-6,0,0,0,0,1)
+        # To send the rosbots to the same goal (uncomment)
         #self.create_goal(1,0,0,0,0,0,1) #call the function that creats initial goals
-        self.create_goal(2,2,0,0,0,0,1)
-        self.create_goal(2,3,0,0,0,0,1)
-        self.create_goal(-1,0,0,0,0,0,1)
+        # self.create_goal(2,2,0,0,0,0,1)
+        # self.create_goal(2,3,0,0,0,0,1)
+        # self.create_goal(-1,0,0,0,0,0,1)
+
         self.update_goal(self.goal_list[self.goal_counter])
         self.client.send_goal(self.Goal, feedback_cb=self.feedback_callback)
 
@@ -108,11 +115,12 @@ class multi_goal_path_planning:
 
 
 if __name__ == '__main__': #check to ensure that the script being run is the main executable
-    class_instance = multi_goal_path_planning(1) #create an instance of the multi_goal_path_planning() class 
+    #create instances of the multi_goal_path_planning() class 
+    class_instance = multi_goal_path_planning(1) 
     class_instance2 = multi_goal_path_planning(2)
-    #class_instance3 = multi_goal_path_planning(3)
+    class_instance3 = multi_goal_path_planning(3) #uncomment to work with the 3rd robot
     try:
-        #class_instance3.main()
+        class_instance3.main() #uncomment to work with the 3rd robot
         class_instance2.main()
         class_instance.main()
         rospy.spin()            # Create a loop that will keep the program in execution
